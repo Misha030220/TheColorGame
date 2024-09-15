@@ -28,22 +28,24 @@ let menuTextColors = ["#FFFFFF", "#FFCC00", "#FF66CC", "#33FF33", "#FF3333", "#3
 let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
 function setup() {
-  createCanvas(windowWidth, windowHeight); // Canvas auf die Fenstergröße setzen
-
+  createCanvas(windowWidth, windowHeight);
   
-  gameState = START_MENU; // Starte mit dem Hauptmenü
+  // Berechnungen basierend auf der Bildschirmgröße
+  baseBallSpeed = height / 100; // Beispiel: Ballgeschwindigkeit ist ein Bruchteil der Bildschirmhöhe
+  ballSpawnInterval = 2000 * (height / 600); // Beispiel: Spawnrate wird proportional zur Bildschirmhöhe skaliert
+  speedIncreaseInterval = 7000 * (height / 600); // Beispiel: Intervall wird proportional zur Bildschirmhöhe skaliert
 
-  // Setze eine zufällige Farbe aus der Liste für die Schrift
+  // Der Rest deines setup-Codes bleibt unverändert
+  gameState = START_MENU;
   menuTextColor = color(random(menuTextColors));
-
-  // Lade den High Score aus dem lokalen Speicher
   let storedHighScore = localStorage.getItem('highScore');
   let storedHighScoreTime = localStorage.getItem('highScoreTime');
   if (storedHighScore !== null) {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
-  
+
+
 
   
   
@@ -306,9 +308,10 @@ function spawnBalls(numBalls) {
 
 
 
+
 // Funktion zum Erhöhen der Geschwindigkeit der Bälle
 function increaseBallSpeed() {
-  baseBallSpeed *= 1.1; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
+  baseBallSpeed *= 1.15; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
 }
 
 // Funktion zur Bestimmung der aktuellen Anzahl an Bällen
@@ -369,6 +372,7 @@ class Ball {
            this.x < bucket.x + bucket.width;
   }
 }
+
 
 
 // Bucket-Klasse
