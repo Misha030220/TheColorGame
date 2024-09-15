@@ -8,11 +8,11 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed;       // Grundgeschwindigkeit der Bälle
-let speedIncreaseInterval = 8000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
+let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
+let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
-let maxBallCount = 10;       // Maximale Anzahl der Bälle, die im Spiel sein können
+let maxBallCount = 15;       // Maximale Anzahl der Bälle, die im Spiel sein können
 
 // Zustände für das Spiel
 let gameState;
@@ -29,8 +29,7 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
 function setup() {
   createCanvas(windowWidth, windowHeight); // Canvas auf die Fenstergröße setzen
-  
-   adjustGameElements();
+
   
   gameState = START_MENU; // Starte mit dem Hauptmenü
 
@@ -45,14 +44,10 @@ function setup() {
     highScoreTime = parseInt(storedHighScoreTime);
   }
   
-  function adjustGameElements() {
-  // Passen die Größe der Bälle oder andere Elemente basierend auf der Canvas-Größe an
-  ballSize = width / 20;
-    
-}
+
   
   
-   baseBallSpeed = height / 200;
+  
 }
 
 function draw() {
@@ -246,7 +241,6 @@ function saveHighScore() {
   }
 }
 
-// Funktion zum Spawnen neuer Bälle
 function spawnBalls(numBalls) {
   let startY = -50; // Bälle starten etwas weiter oben außerhalb des Bildschirms
   let minBallSpacing = height / 20; // Mindestabstand zwischen den Bällen ist der Durchmesser eines Balls
@@ -311,6 +305,7 @@ function spawnBalls(numBalls) {
 
 
 
+
 // Funktion zum Erhöhen der Geschwindigkeit der Bälle
 function increaseBallSpeed() {
   baseBallSpeed *= 1.1; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
@@ -347,18 +342,19 @@ function formatTime(seconds) {
   let secs = seconds % 60;
   return nf(minutes, 2) + ':' + nf(secs, 2);
 }
-// Ball-Klasse
+
+
 class Ball {
   constructor(color, x, y) {
     this.x = x;
     this.y = y;
     this.size = height / 20; // Ballgröße proportional zur Höhe
-    this.speed = 3; // Konstante Geschwindigkeit für alle Bälle
+    this.speed = baseBallSpeed; // Verwende die Basisgeschwindigkeit
     this.color = color;
   }
 
   move() {
-    this.y += this.speed;
+    this.y += this.speed; // Verwende die dynamische Geschwindigkeit
   }
 
   display() {
@@ -373,6 +369,7 @@ class Ball {
            this.x < bucket.x + bucket.width;
   }
 }
+
 
 // Bucket-Klasse
 class Bucket {
@@ -450,5 +447,4 @@ function mouseDragged() {
 // Anpassung der Canvas-Größe bei Fenstergrößenänderung
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  adjustGameElements();
 }           
