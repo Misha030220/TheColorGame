@@ -1,4 +1,4 @@
-let bucketColor;
+ let bucketColor;
 let previousBucketColor; // Variable für die vorherige Farbe des Eimers
 let ballColors = ["#FF00FF", "#33FF33", "#0099FF", "#FFFF00"]; // Neonfarben: Neon-Grün ist jetzt #33FF33
 let score = 0;
@@ -8,7 +8,7 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed = 3;       // Grundgeschwindigkeit der Bälle
+let baseBallSpeed;       // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 8000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
@@ -29,6 +29,9 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
 function setup() {
   createCanvas(windowWidth, windowHeight); // Canvas auf die Fenstergröße setzen
+  
+   adjustGameElements();
+  
   gameState = START_MENU; // Starte mit dem Hauptmenü
 
   // Setze eine zufällige Farbe aus der Liste für die Schrift
@@ -41,6 +44,15 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
+  
+  function adjustGameElements() {
+  // Passen die Größe der Bälle oder andere Elemente basierend auf der Canvas-Größe an
+  ballSize = width / 20;
+    
+}
+  
+  
+   baseBallSpeed = height / 200;
 }
 
 function draw() {
@@ -237,9 +249,8 @@ function saveHighScore() {
 // Funktion zum Spawnen neuer Bälle
 function spawnBalls(numBalls) {
   let startY = -50; // Bälle starten etwas weiter oben außerhalb des Bildschirms
-  let minBallSpacingY = height / 4; // Mindestabstand zwischen den Bällen in Y-Richtung
-  let minBallSpacingX = ballSpacing; // Mindestabstand zwischen den Bällen in X-Richtung
-  let hasBucketColorBall = false;
+  let minBallSpacing = height / 20; // Mindestabstand zwischen den Bällen ist der Durchmesser eines Balls
+  let maxTries = 100; // Maximale Versuche, um eine gültige Position zu finden
 
   // Array für die Bälle mit ihren Positionen
   let ballsWithPositions = [];
@@ -247,14 +258,15 @@ function spawnBalls(numBalls) {
   for (let i = 0; i < numBalls; i++) {
     let ballX, ballY;
     let validPosition = false;
+    let tries = 0;
 
     // Versuche, für jeden Ball eine gültige Position zu finden
-    while (!validPosition) {
+    while (!validPosition && tries < maxTries) {
       // Wähle eine zufällige X-Position für den Ball
-      ballX = random(20, width - 20); // Berücksichtige die Ballgröße
+      ballX = random(minBallSpacing, width - minBallSpacing); // Berücksichtige die Ballgröße
 
-      // Wähle eine zufällige Y-Position, die nicht auf der gleichen Höhe wie ein anderer Ball ist
-      ballY = startY - (i * minBallSpacingY); // Verteile die Bälle vertikal
+      // Wähle eine zufällige Y-Position
+      ballY = startY - (i * minBallSpacing * 2); // Verteile die Bälle vertikal mit Abstand
 
       validPosition = true;
 
@@ -262,20 +274,27 @@ function spawnBalls(numBalls) {
       for (let pos of ballsWithPositions) {
         let dX = abs(ballX - pos.x); // Berechne den Abstand in X-Richtung
         let dY = abs(ballY - pos.y); // Berechne den Abstand in Y-Richtung
+        let distance = dist(ballX, ballY, pos.x, pos.y); // Berechne den Abstand zwischen den Bällen
 
-        if (dX < minBallSpacingX && dY < minBallSpacingY) {
-          // Der Abstand muss groß genug sein, um keine Überlappung zu verursachen
-          validPosition = false;
+        if (distance < minBallSpacing * 2) {
+          validPosition = false; // Ungültige Position, weil die Bälle zu nah sind
           break;
         }
       }
+
+      tries++; // Versuche erhöhen, um Endlosschleifen zu vermeiden
+    }
+
+    // Wenn keine gültige Position nach maxTries gefunden wurde, überspringe diesen Ball
+    if (!validPosition) {
+      console.log('Konnte keinen Platz für Ball finden');
+      continue;
     }
 
     // Stelle sicher, dass der erste Ball die Farbe des Eimers hat
     let ballColor;
     if (i === 0) {
       ballColor = bucketColor;
-      hasBucketColorBall = true;
     } else {
       // Stelle sicher, dass die anderen Bälle nicht die gleiche Farbe wie der Eimer haben
       do {
@@ -285,11 +304,10 @@ function spawnBalls(numBalls) {
 
     // Erstelle den Ball und füge ihn zur Liste hinzu
     let ball = new Ball(ballColor, ballX, ballY);
-    ballsWithPositions.push({x: ballX, y: ballY}); // Speichere die Position, um Überlappungen zu vermeiden
+    ballsWithPositions.push({ x: ballX, y: ballY }); // Speichere die Position, um Überlappungen zu vermeiden
     balls.push(ball); // Füge den Ball zur Liste der Bälle hinzu
   }
 }
-
 
 
 
@@ -432,4 +450,5 @@ function mouseDragged() {
 // Anpassung der Canvas-Größe bei Fenstergrößenänderung
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-} 
+  adjustGameElements();
+}           
