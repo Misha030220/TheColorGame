@@ -27,15 +27,20 @@ let lastGameTime = 0;
 let menuTextColors = ["#FFFFFF", "#FFCC00", "#FF66CC", "#33FF33", "#FF3333", "#33FFFF", "#FF9900", "#CC00FF", "#00CC99", "#FF6600"]; // Gut sichtbare Farben für die Schrift
 let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
-  // Berechnungen basierend auf der Bildschirmgröße
-  baseBallSpeed = height / 100; // Beispiel: Ballgeschwindigkeit ist ein Bruchteil der Bildschirmhöhe
-  ballSpawnInterval = 2000 * (height / 600); // Beispiel: Spawnrate wird proportional zur Bildschirmhöhe skaliert
-  speedIncreaseInterval = 7000 * (height / 600); // Beispiel: Intervall wird proportional zur Bildschirmhöhe skaliert
 
-  // Der Rest deines setup-Codes bleibt unverändert
+  let heightRatio = height / 600;
+
+  ballSpeed = baseBallSpeed * heightRatio;
+  ballSpawnInterval = baseBallSpawnInterval / heightRatio;
+  speedIncreaseInterval = baseSpeedIncreaseInterval / heightRatio;
+
+  console.log(`Ball Speed: ${ballSpeed}`);
+  console.log(`Ball Spawn Interval: ${ballSpawnInterval}`);
+  console.log(`Speed Increase Interval: ${speedIncreaseInterval}`);
+
   gameState = START_MENU;
   menuTextColor = color(random(menuTextColors));
   let storedHighScore = localStorage.getItem('highScore');
@@ -44,7 +49,7 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
-
+}
 
 
   
