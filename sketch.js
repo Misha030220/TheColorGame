@@ -29,7 +29,6 @@ let lastGameTime = 0;
 let menuTextColors = ["#FFFFFF", "#FFCC00", "#FF66CC", "#33FF33", "#FF3333", "#33FFFF", "#FF9900", "#CC00FF", "#00CC99", "#FF6600"]; // Gut sichtbare Farben für die Schrift
 let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -40,7 +39,10 @@ function setup() {
   ballSpeed = baseBallSpeed * heightRatio;
   ballSpawnInterval = baseBallSpawnInterval / heightRatio;
   speedIncreaseInterval = baseSpeedIncreaseInterval / heightRatio;
-  ballSpacing = height / 15; // Abstand zwischen den Bällen proportional zur Höhe
+
+  // Optional: Setze Grenzen für die Ballgeschwindigkeit und das Intervall
+  ballSpeed = constrain(ballSpeed, 2, 10); // Mindest- und Höchstgeschwindigkeit der Bälle
+  ballSpawnInterval = constrain(ballSpawnInterval, 500, 3000); // Mindest- und Höchstintervall für das Spawnen
 
   // Der Rest deines setup-Codes bleibt unverändert
   gameState = START_MENU;
@@ -51,6 +53,8 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
+
+
 
 
 
@@ -317,6 +321,7 @@ function spawnBalls(numBalls) {
 
 
 
+
 // Funktion zum Erhöhen der Geschwindigkeit der Bälle
 function increaseBallSpeed() {
   baseBallSpeed *= 1.15; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
@@ -359,7 +364,7 @@ class Ball {
   constructor(color, x, y) {
     this.x = x;
     this.y = y;
-    this.size = height / 15; // Ballgröße proportional zur Höhe
+    this.size = height / 20; // Ballgröße proportional zur Höhe
     this.speed = ballSpeed; // Verwende die berechnete Ballgeschwindigkeit
     this.color = color;
   }
@@ -380,6 +385,7 @@ class Ball {
            this.x < bucket.x + bucket.width;
   }
 }
+
 
 
 
