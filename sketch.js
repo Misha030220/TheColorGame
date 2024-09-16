@@ -2,7 +2,7 @@ let bucketColor;
 let previousBucketColor; // Variable für die vorherige Farbe des Eimers
 let ballColors = ["#FF00FF", "#33FF33", "#0099FF", "#FFFF00"]; // Neonfarben: Neon-Grün ist jetzt #33FF33
 let score = 0;
-let lives = 3;
+let lives = 5;
 let ballSpawnInterval = 2000; // Zeitintervall zum Spawnen neuer Bälle (in Millisekunden)
 let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
@@ -29,22 +29,21 @@ let lastGameTime = 0;
 let menuTextColors = ["#FFFFFF", "#FFCC00", "#FF66CC", "#33FF33", "#FF3333", "#33FFFF", "#FF9900", "#CC00FF", "#00CC99", "#FF6600"]; // Gut sichtbare Farben für die Schrift
 let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
+
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  // Berechne die relative Größe basierend auf der Höhe des Bildschirms
-  let heightRatio = height / 600; // Höhe des Referenzbildschirms ist 600px
+  // Grundgeschwindigkeit
+  ballSpeed = baseBallSpeed;
+  
+  // Anpassungen für mobile Geräte
+  if (windowWidth < 600) { // Annahme: Geräte mit weniger als 600px Breite sind mobile Geräte
+    ballSpeed = baseBallSpeed * 1.5; // Erhöhe die Ballgeschwindigkeit auf mobilen Geräten
+    ballSpawnInterval = baseBallSpawnInterval * 0.75; // Reduziere das Spawn-Intervall auf mobilen Geräten
+  }
 
-  // Wende die Ratio auf die Basiswerte an
-  ballSpeed = baseBallSpeed * heightRatio;
-  ballSpawnInterval = baseBallSpawnInterval / heightRatio;
-  speedIncreaseInterval = baseSpeedIncreaseInterval / heightRatio;
-
-  // Optional: Setze Grenzen für die Ballgeschwindigkeit und das Intervall
-  ballSpeed = constrain(ballSpeed, 2, 10); // Mindest- und Höchstgeschwindigkeit der Bälle
-  ballSpawnInterval = constrain(ballSpawnInterval, 500, 3000); // Mindest- und Höchstintervall für das Spawnen
-
-  // Der Rest deines setup-Codes bleibt unverändert
+  // Weitere initiale Einstellungen
   gameState = START_MENU;
   menuTextColor = color(random(menuTextColors));
   let storedHighScore = localStorage.getItem('highScore');
@@ -53,8 +52,6 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
-
-
 
 
 
@@ -153,7 +150,7 @@ function setupGame() {
   bucket = new Bucket();
   balls = [];
   score = 0;
-  lives = 3;
+  lives = 5;
   bucketColor = random(ballColors);
   previousBucketColor = null;
   baseBallSpeed = 3;
@@ -336,7 +333,7 @@ function getCurrentBallCount() {
 // Funktion zum Zurücksetzen des Spiels
 function resetGame() {
   score = 0;
-  lives = 3;
+  lives = 5;
   balls = [];
   bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
   previousBucketColor = null; // Vorherige Farbe zurücksetzen
