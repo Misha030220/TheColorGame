@@ -2,13 +2,13 @@ let bucketColor;
 let previousBucketColor; // Variable für die vorherige Farbe des Eimers
 let ballColors = ["#FF00FF", "#33FF33", "#0099FF", "#FFFF00"]; // Neonfarben: Neon-Grün ist jetzt #33FF33
 let score = 0;
-let lives = 5;
+let lives = 3;
 let ballSpawnInterval = 2000; // Zeitintervall zum Spawnen neuer Bälle (in Millisekunden)
 let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed=4;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=8;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
@@ -145,20 +145,30 @@ function mouseDragged() {
   }
 }
 
-// Funktion zum Initialisieren des Spiels
+
 function setupGame() {
   bucket = new Bucket();
   balls = [];
   score = 0;
-  lives = 5;
+  lives = 3;
   bucketColor = random(ballColors);
   previousBucketColor = null;
-  baseBallSpeed = 3;
+
+  // Berechne die Ballgeschwindigkeit basierend auf dem aktuellen Bildschirm
+  if (windowWidth < 600) { // Annahme: Geräte mit weniger als 600px Breite sind mobile Geräte
+    ballSpeed = baseBallSpeed * 1.5; // Erhöhe die Ballgeschwindigkeit für mobile Geräte
+    ballSpawnInterval = baseBallSpawnInterval * 0.75; // Reduziere das Spawn-Intervall für mobile Geräte
+  } else {
+    ballSpeed = baseBallSpeed; // Normale Geschwindigkeit für andere Geräte
+    ballSpawnInterval = baseBallSpawnInterval; // Normales Intervall für andere Geräte
+  }
+
   lastBallSpawnTime = millis();
   lastSpeedIncreaseTime = millis();
   resetTimer();
-  spawnBalls(initialBallCount);
+  spawnBalls(getCurrentBallCount());
 }
+
 
 // Funktion für das Gameplay
 function gamePlay() {
