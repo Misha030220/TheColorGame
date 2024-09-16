@@ -40,6 +40,7 @@ function setup() {
   ballSpeed = baseBallSpeed * heightRatio;
   ballSpawnInterval = baseBallSpawnInterval / heightRatio;
   speedIncreaseInterval = baseSpeedIncreaseInterval / heightRatio;
+  ballSpacing = height / 15; // Abstand zwischen den Bällen proportional zur Höhe
 
   // Der Rest deines setup-Codes bleibt unverändert
   gameState = START_MENU;
@@ -50,6 +51,8 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
+
+
 
 
 
@@ -250,10 +253,11 @@ function saveHighScore() {
   }
 }
 
+
+
 function spawnBalls(numBalls) {
   let startY = -50; // Bälle starten etwas weiter oben außerhalb des Bildschirms
-  let minBallSpacing = height / 20; // Mindestabstand zwischen den Bällen ist der Durchmesser eines Balls
-  let maxTries = 100; // Maximale Versuche, um eine gültige Position zu finden
+  let minBallSpacing = height / 15; // Mindestabstand zwischen den Bällen ist proportional zur Höhe
 
   // Array für die Bälle mit ihren Positionen
   let ballsWithPositions = [];
@@ -264,22 +268,20 @@ function spawnBalls(numBalls) {
     let tries = 0;
 
     // Versuche, für jeden Ball eine gültige Position zu finden
-    while (!validPosition && tries < maxTries) {
+    while (!validPosition && tries < 100) {
       // Wähle eine zufällige X-Position für den Ball
       ballX = random(minBallSpacing, width - minBallSpacing); // Berücksichtige die Ballgröße
 
       // Wähle eine zufällige Y-Position
-      ballY = startY - (i * minBallSpacing * 2); // Verteile die Bälle vertikal mit Abstand
+      ballY = startY - (i * minBallSpacing); // Verteile die Bälle vertikal mit Abstand
 
       validPosition = true;
 
       // Überprüfe, ob der Ball sich nicht mit anderen Bällen überlappt
       for (let pos of ballsWithPositions) {
-        let dX = abs(ballX - pos.x); // Berechne den Abstand in X-Richtung
-        let dY = abs(ballY - pos.y); // Berechne den Abstand in Y-Richtung
         let distance = dist(ballX, ballY, pos.x, pos.y); // Berechne den Abstand zwischen den Bällen
 
-        if (distance < minBallSpacing * 2) {
+        if (distance < minBallSpacing * 1.5) {
           validPosition = false; // Ungültige Position, weil die Bälle zu nah sind
           break;
         }
@@ -311,7 +313,6 @@ function spawnBalls(numBalls) {
     balls.push(ball); // Füge den Ball zur Liste der Bälle hinzu
   }
 }
-
 
 
 
@@ -358,7 +359,7 @@ class Ball {
   constructor(color, x, y) {
     this.x = x;
     this.y = y;
-    this.size = height / 20; // Ballgröße proportional zur Höhe
+    this.size = height / 15; // Ballgröße proportional zur Höhe
     this.speed = ballSpeed; // Verwende die berechnete Ballgeschwindigkeit
     this.color = color;
   }
