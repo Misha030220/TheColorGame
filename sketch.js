@@ -1,4 +1,4 @@
- let bucketColor;
+let bucketColor;
 let previousBucketColor; // Variable für die vorherige Farbe des Eimers
 let ballColors = ["#FF00FF", "#33FF33", "#0099FF", "#FFFF00"]; // Neonfarben: Neon-Grün ist jetzt #33FF33
 let score = 0;
@@ -8,11 +8,13 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=4;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
 let maxBallCount = 15;       // Maximale Anzahl der Bälle, die im Spiel sein können
+let baseBallSpawnInterval = 2000; // Fester Basiswert in Millisekunden
+let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 
 // Zustände für das Spiel
 let gameState;
@@ -31,16 +33,15 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  let heightRatio = height / 600;
+  // Berechne die relative Größe basierend auf der Höhe des Bildschirms
+  let heightRatio = height / 600; // Höhe des Referenzbildschirms ist 600px
 
+  // Wende die Ratio auf die Basiswerte an
   ballSpeed = baseBallSpeed * heightRatio;
   ballSpawnInterval = baseBallSpawnInterval / heightRatio;
   speedIncreaseInterval = baseSpeedIncreaseInterval / heightRatio;
 
-  console.log(`Ball Speed: ${ballSpeed}`);
-  console.log(`Ball Spawn Interval: ${ballSpawnInterval}`);
-  console.log(`Speed Increase Interval: ${speedIncreaseInterval}`);
-
+  // Der Rest deines setup-Codes bleibt unverändert
   gameState = START_MENU;
   menuTextColor = color(random(menuTextColors));
   let storedHighScore = localStorage.getItem('highScore');
@@ -49,7 +50,8 @@ function setup() {
     highScore = parseInt(storedHighScore);
     highScoreTime = parseInt(storedHighScoreTime);
   }
-}
+
+
 
 
   
@@ -357,12 +359,12 @@ class Ball {
     this.x = x;
     this.y = y;
     this.size = height / 20; // Ballgröße proportional zur Höhe
-    this.speed = baseBallSpeed; // Verwende die Basisgeschwindigkeit
+    this.speed = ballSpeed; // Verwende die berechnete Ballgeschwindigkeit
     this.color = color;
   }
 
   move() {
-    this.y += this.speed; // Verwende die dynamische Geschwindigkeit
+    this.y += this.speed; // Verwende die berechnete Geschwindigkeit
   }
 
   display() {
@@ -377,6 +379,7 @@ class Ball {
            this.x < bucket.x + bucket.width;
   }
 }
+
 
 
 
