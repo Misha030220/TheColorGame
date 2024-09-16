@@ -8,7 +8,7 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed=8;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=9;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
@@ -39,7 +39,7 @@ function setup() {
   
   // Anpassungen für mobile Geräte
   if (windowWidth < 600) { // Annahme: Geräte mit weniger als 600px Breite sind mobile Geräte
-    ballSpeed = baseBallSpeed * 1.5; // Erhöhe die Ballgeschwindigkeit auf mobilen Geräten
+    ballSpeed = baseBallSpeed * 2; // Erhöhe die Ballgeschwindigkeit auf mobilen Geräten
     ballSpawnInterval = baseBallSpawnInterval * 0.75; // Reduziere das Spawn-Intervall auf mobilen Geräten
   }
 
