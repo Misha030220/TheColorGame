@@ -8,11 +8,11 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed=15;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=17;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
-let maxBallCount = 15;       // Maximale Anzahl der Bälle, die im Spiel sein können
+let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein können
 let baseBallSpawnInterval = 2000; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 
@@ -78,7 +78,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu N', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Neu', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -347,7 +347,7 @@ function resetGame() {
   balls = [];
   bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
   previousBucketColor = null; // Vorherige Farbe zurücksetzen
-  baseBallSpeed = 3; // Basisgeschwindigkeit zurücksetzen
+  baseBallSpeed = 17; // Basisgeschwindigkeit zurücksetzen
   lastBallSpawnTime = millis(); // Zeit des letzten Spawns zurücksetzen
   lastSpeedIncreaseTime = millis(); // Zeit der letzten Geschwindigkeitserhöhung zurücksetzen
   resetTimer(); // Timer zurücksetzen
