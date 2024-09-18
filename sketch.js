@@ -7,13 +7,13 @@ let ballSpawnInterval = 2000; // Zeitintervall zum Spawnen neuer Bälle (in Mill
 let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
-let ballSpacing = 80;        // Abstand zwischen den Bällen
-let baseBallSpeed=9;      // Grundgeschwindigkeit der Bälle
+let ballSpacing ;        // Abstand zwischen den Bällen
+let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
 let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein können
-let baseBallSpawnInterval = 2000; // Fester Basiswert in Millisekunden
+let baseBallSpawnInterval = 1500; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
  
@@ -78,7 +78,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Mein', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -275,9 +275,13 @@ function saveHighScore() {
 
 
 
+
+
+
 function spawnBalls(numBalls) {
   let startY = -50; // Bälle starten etwas weiter oben außerhalb des Bildschirms
   let minBallSpacing = height / 15; // Mindestabstand zwischen den Bällen ist proportional zur Höhe
+  let verticalSpacing = bucket.height * 2.5; // Der vertikale Abstand zwischen den Bällen beträgt das Fünffache der Eimerhöhe
 
   // Array für die Bälle mit ihren Positionen
   let ballsWithPositions = [];
@@ -286,14 +290,20 @@ function spawnBalls(numBalls) {
     let ballX, ballY;
     let validPosition = false;
     let tries = 0;
+    let maxTries = 200; // Maximale Anzahl der Versuche zur Platzierung eines Balls
 
-    // Versuche, für jeden Ball eine gültige Position zu finden
-    while (!validPosition && tries < 100) {
+    while (!validPosition && tries < maxTries) {
       // Wähle eine zufällige X-Position für den Ball
       ballX = random(minBallSpacing, width - minBallSpacing); // Berücksichtige die Ballgröße
 
-      // Wähle eine zufällige Y-Position
-      ballY = startY - (i * minBallSpacing); // Verteile die Bälle vertikal mit Abstand
+      // Wähle eine zufällige Y-Position, die einen vertikalen Abstand aufweist
+      ballY = startY - (i * verticalSpacing); // Verteile die Bälle vertikal mit Abstand
+
+      // Sicherstellen, dass der Ball nicht über den Bildschirmrand hinausgeht
+      if (ballY > height || ballY < -height) {
+        tries++;
+        continue;
+      }
 
       validPosition = true;
 
@@ -301,7 +311,8 @@ function spawnBalls(numBalls) {
       for (let pos of ballsWithPositions) {
         let distance = dist(ballX, ballY, pos.x, pos.y); // Berechne den Abstand zwischen den Bällen
 
-        if (distance < minBallSpacing * 1.5) {
+        // Überprüfe den Abstand, der mindestens dem Durchmesser eines Balls entsprechen sollte
+        if (distance < (minBallSpacing + height / 20)) {
           validPosition = false; // Ungültige Position, weil die Bälle zu nah sind
           break;
         }
@@ -338,9 +349,11 @@ function spawnBalls(numBalls) {
 
 
 
+
+
 // Funktion zum Erhöhen der Geschwindigkeit der Bälle
 function increaseBallSpeed() {
-  baseBallSpeed *= 1.15; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
+  baseBallSpeed *= 1.05; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
 }
 
 // Funktion zur Bestimmung der aktuellen Anzahl an Bällen
@@ -357,7 +370,7 @@ function resetGame() {
   lives = 3;
 
   // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
-  let baseSpeed = 9;  
+  let baseSpeed = 5;  
   let deviceHeight = window.innerHeight;
   let referenceHeight = 600;
 
@@ -387,12 +400,14 @@ function formatTime(seconds) {
 }
 
 
+
+
 class Ball {
   constructor(color, x, y) {
     this.x = x;
     this.y = y;
     this.size = height / 20; // Ballgröße proportional zur Höhe
-    this.speed = ballSpeed; // Verwende die berechnete Ballgeschwindigkeit
+    this.speed = baseBallSpeed; // Verwende die berechnete Ballgeschwindigkeit
     this.color = color;
   }
 
@@ -412,6 +427,7 @@ class Ball {
            this.x < bucket.x + bucket.width;
   }
 }
+
 
 
 
@@ -493,4 +509,4 @@ function mouseDragged() {
 // Anpassung der Canvas-Größe bei Fenstergrößenänderung
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}           
+}    
