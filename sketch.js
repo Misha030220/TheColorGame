@@ -8,7 +8,7 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing=80 ;        // Abstand zwischen den Bällen
-let baseBallSpeed=15;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
@@ -36,7 +36,7 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 function setup() {
   createCanvas(windowWidth, windowHeight);  // Erstelle das Canvas mit der aktuellen Fenstergröße
   
-  let baseSpeed = 15;  // Basisgeschwindigkeit
+  let baseSpeed = 5;  // Basisgeschwindigkeit
   let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
   let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
 
@@ -148,7 +148,7 @@ function mouseDragged() {
 
 
 function setupGame() {
-  let baseSpeed = 15;  // Basisgeschwindigkeit
+  let baseSpeed = 5;  // Basisgeschwindigkeit
   let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
   let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
 
@@ -370,7 +370,7 @@ function resetGame() {
   lives = 3;
 
   // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
-  let baseSpeed = 8;  
+  let baseSpeed = 5;  
   let deviceHeight = window.innerHeight;
   let referenceHeight = 600;
 
