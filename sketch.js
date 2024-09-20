@@ -20,7 +20,7 @@ let deviceHeight = window.innerHeight;
 
 
 let speedIncreasePerSecond = 0.005;  // 1% pro Sekunde Erhöhung
-let frameRate = 60;  // Annahme, dass das Spiel mit 60 FPS läuft
+let frameRate = 120;  // Annahme, dass das Spiel mit 60 FPS läuft
  
 
 
@@ -89,7 +89,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test3', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test3.5', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
