@@ -8,12 +8,12 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing=80 ;        // Abstand zwischen den Bällen
-let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=6;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
 let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein können
-let baseBallSpawnInterval = 2000; // Fester Basiswert in Millisekunden
+let baseBallSpawnInterval = 4000; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
 
@@ -41,7 +41,7 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 function setup() {
   createCanvas(windowWidth, windowHeight);  // Erstelle das Canvas mit der aktuellen Fenstergröße
   
-  let baseSpeed = 5;  // Basisgeschwindigkeit
+  let baseSpeed = 6;  // Basisgeschwindigkeit
   let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
   let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
   let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
@@ -89,7 +89,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test2', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test3', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -159,7 +159,7 @@ function mouseDragged() {
 
 
 function setupGame() {
-  let baseSpeed = 5;  // Basisgeschwindigkeit
+  let baseSpeed = 6;  // Basisgeschwindigkeit
   let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
   let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
   let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
@@ -398,7 +398,7 @@ function resetGame() {
   lives = 3;
 
   // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
-  let baseSpeed = 5;  
+  let baseSpeed = 6;  
   let deviceHeight = window.innerHeight;
   let referenceHeight = 600;
  let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
