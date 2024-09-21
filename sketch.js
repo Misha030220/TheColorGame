@@ -45,12 +45,7 @@ function setup() {
     baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
   }
 
-  if (isAndroid()) {
-    createCanvas(windowWidth, windowHeight, WEBGL);  // Nutze WebGL für Android
-  } else {
-    createCanvas(windowWidth, windowHeight);  // Normale 2D-Canvas für andere Geräte
-  }
-  
+ 
  
   let baseSpeed = 7;  // Basisgeschwindigkeit
   let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
