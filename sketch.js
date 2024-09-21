@@ -8,14 +8,19 @@ let lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
 let timerStartTime;          // Startzeit des Timers
 let gameTime = 0;            // Zeit in Sekunden
 let ballSpacing=80 ;        // Abstand zwischen den Bällen
-let baseBallSpeed=5;      // Grundgeschwindigkeit der Bälle
+let baseBallSpeed=7;      // Grundgeschwindigkeit der Bälle
 let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
 let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein können
-let baseBallSpawnInterval = 1500; // Fester Basiswert in Millisekunden
+let baseBallSpawnInterval = 3000; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
+
+
+
+let speedIncreasePerSecond = 0.005;  // 1% pro Sekunde Erhöhung
+let frameRate = 60;  // Annahme, dass das Spiel mit 60 FPS läuft
  
 
 
@@ -35,15 +40,30 @@ let menuTextColor; // Variable für die Schriftfarbe des Hauptmenüs
 
 function setup() {
   createCanvas(windowWidth, windowHeight);  // Erstelle das Canvas mit der aktuellen Fenstergröße
-  
-  
-  let baseSpeed = 5;  // Basisgeschwindigkeit
-  let referenceWidth = 800;
-  let referenceHeight = 600;
-  
-  // Berechne die Ballgeschwindigkeit basierend auf der Bildschirmgröße
-  ballSpeed = baseSpeed * Math.min(windowWidth / referenceWidth, windowHeight / referenceHeight);
 
+ if (isAndroid()) {
+    baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
+  }
+
+  if (isAndroid()) {
+    createCanvas(windowWidth, windowHeight, WEBGL);  // Nutze WebGL für Android
+  } else {
+    createCanvas(windowWidth, windowHeight);  // Normale 2D-Canvas für andere Geräte
+  }
+  
+ 
+  let baseSpeed = 7;  // Basisgeschwindigkeit
+  let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
+  let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
+  let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
+
+ // Berechnung der Bildschirmdiagonale
+  let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
+
+  // Ballgeschwindigkeit basierend auf der Diagonale des Geräts anpassen
+  ballSpeed = baseBallSpeed * (deviceDiagonal / referenceDiagonal);
+  
+  
   gameState = START_MENU;  // Setze den Spielstatus auf das Startmenü
   menuTextColor = color(random(menuTextColors));  // Zufällige Farbe für das Menü-Text
   let storedHighScore = localStorage.getItem('highScore');
@@ -54,7 +74,9 @@ function setup() {
   }
 
 
-
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
 
 
 
@@ -70,6 +92,7 @@ function draw() {
   } else if (gameState === GAME_PLAY) {
     gamePlay();
   }
+  increaseBallSpeedContinuously();
 }
 
 // Funktion zum Zeichnen des Hauptmenüs
@@ -79,7 +102,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test2', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test6', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -148,14 +171,17 @@ function mouseDragged() {
 
 
 
-
 function setupGame() {
-  let baseSpeed = 5;  // Basisgeschwindigkeit
-  let referenceWidth = 800;  // Referenzbreite für das ursprüngliche Gerät
-  let referenceHeight = 600; // Referenzhöhe für das ursprüngliche Gerät
-  
-  // Berechne die Ballgeschwindigkeit basierend auf der Bildschirmgröße
-  ballSpeed = baseSpeed * Math.min(windowWidth / referenceWidth, windowHeight / referenceHeight);
+  let baseSpeed = 7;  // Basisgeschwindigkeit
+  let deviceHeight = window.innerHeight; // Höhe des aktuellen Geräts
+  let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
+  let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
+
+   // Berechnung der Bildschirmdiagonale
+  let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
+
+  // Ballgeschwindigkeit basierend auf der Diagonale des Geräts anpassen
+  ballSpeed = baseBallSpeed * (deviceDiagonal / referenceDiagonal);
 
   bucket = new Bucket();
   balls = [];
@@ -166,15 +192,15 @@ function setupGame() {
 
   // Anpassung für mobile Geräte
   if (windowWidth < 600) { // Annahme: Geräte mit weniger als 600px Breite sind mobile Geräte
-    ballSpawnInterval = baseBallSpawnInterval * 0.7; // Reduziere das Spawn-Intervall auf mobilen Geräten
+    ballSpawnInterval = baseBallSpawnInterval * 0.8; // Reduziere das Spawn-Intervall auf mobilen Geräten
   } else {
     ballSpawnInterval = baseBallSpawnInterval; // Normales Intervall für größere Geräte
   }
 
   lastBallSpawnTime = millis();
-  lastSpeedIncreaseTime = millis(); // Stelle sicher, dass die Zeit korrekt gesetzt wird
-  resetTimer(); // Timer zurücksetzen
-  spawnBalls(initialBallCount); // Den ersten Satz von Bällen nach dem Zurücksetzen spawnen
+  lastSpeedIncreaseTime = millis();
+  resetTimer();
+  spawnBalls(getCurrentBallCount());
 }
 
 
@@ -184,7 +210,6 @@ function setupGame() {
 // Funktion für das Gameplay
 function gamePlay() {
   background(0); // Hintergrund auf schwarz setzen
-  
 
   // Update und Anzeige des Timers
   if (lives > 0) {
@@ -197,15 +222,11 @@ function gamePlay() {
   textAlign(CENTER, TOP);
   text('Time: ' + formatTime(gameTime), width / 2, height / 30);
   
-  
-
-   // Score in der oberen rechten Ecke anzeigen
+  // Score in der oberen rechten Ecke anzeigen
   textSize(height / 25);
   fill(255); // Weiße Schriftfarbe für das Gameplay
   textAlign(RIGHT, TOP);
   text("Score: " + score, width - 20, height / 30);
- 
-  
 
   // Leben in der oberen linken Ecke anzeigen
   textSize(height / 25);
@@ -265,7 +286,10 @@ for (let i = balls.length - 1; i >= 0; i--) {
 
   // Überprüfen, ob es Zeit ist, die Geschwindigkeit der Bälle zu erhöhen
   if (millis() - lastSpeedIncreaseTime > speedIncreaseInterval) {
-    increaseBallSpeed();
+    //increaseBallSpeed();
+    
+    increaseBallSpeedContinuously();
+    
     lastSpeedIncreaseTime = millis(); // Zeit der letzten Geschwindigkeitserhöhung aktualisieren
   }
 }
@@ -359,8 +383,17 @@ function spawnBalls(numBalls) {
 
 
 // Funktion zum Erhöhen der Geschwindigkeit der Bälle
-function increaseBallSpeed() {
-  baseBallSpeed *= 1.1; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
+//function increaseBallSpeed() {
+ // baseBallSpeed *= 1.1; // Erhöhe die Basisgeschwindigkeit um 10% alle Intervalle
+//}
+
+
+function increaseBallSpeedContinuously() {
+  // Berechne die Geschwindigkeitsänderung basierend auf der Zeit seit dem letzten Frame (deltaTime in Millisekunden)
+  let speedIncreaseFactor = 1 + (speedIncreasePerSecond * (deltaTime / 1000));
+  
+  // Erhöhe die Ballgeschwindigkeit kontinuierlich
+  baseBallSpeed *= speedIncreaseFactor;
 }
 
 // Funktion zur Bestimmung der aktuellen Anzahl an Bällen
@@ -377,12 +410,16 @@ function resetGame() {
   lives = 3;
 
   // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
-   let baseSpeed = 5;  // Basisgeschwindigkeit
-  let referenceWidth = 800;
+  let baseSpeed = 7;  
+  let deviceHeight = window.innerHeight;
   let referenceHeight = 600;
-  
-  // Berechne die Ballgeschwindigkeit basierend auf der Bildschirmgröße
-  ballSpeed = baseSpeed * Math.min(windowWidth / referenceWidth, windowHeight / referenceHeight);
+ let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
+
+   // Berechnung der Bildschirmdiagonale
+  let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
+
+  // Ballgeschwindigkeit basierend auf der Diagonale des Geräts anpassen
+  ballSpeed = baseBallSpeed * (deviceDiagonal / referenceDiagonal);
   
   bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
   previousBucketColor = null; // Vorherige Farbe zurücksetzen
@@ -512,10 +549,13 @@ function mouseDragged() {
   }
 }
 
+
+
 // Anpassung der Canvas-Größe bei Fenstergrößenänderung
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }    
+
 
 
 
