@@ -17,9 +17,11 @@
     <script src="sketch.js"></script>
     <script>
 </script>
+
+    
 if ("serviceWorker" in navigator) {
   // declaring scope manually
-  navigator.serviceWorker.register("./sw.js", { scope: "./" }).then(
+  navigator.serviceWorker.register("./service-worker.js", { scope: "./" }).then(
     (registration) => {
       console.log("Service worker registration succeeded:", registration);
     },
