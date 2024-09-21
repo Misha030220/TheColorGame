@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
-<link rel="manifest" href="manifest.json">
-
-
-    
+    <link rel="manifest" href="/manifest.json"> <!-- Absolute Pfade verwenden -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
-   </head>
+  </head>
   <body>
-    <main>
-    </main>
+    <main></main>
     <script src="sketch.js"></script>
-    <script>
-</script>
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(function(registration) {
-        console.log('Service Worker registriert mit Scope:', registration.scope);
-      })
-      .catch(function(error) {
-        console.log('Service Worker Registrierung fehlgeschlagen:', error);
-      });
-  });
-}
+    <!-- Registriere den Service Worker im <script>-Tag -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js')  // Absolute Pfade verwenden
+            .then(function(registration) {
+              console.log('Service Worker registriert mit Scope:', registration.scope);
+            })
+            .catch(function(error) {
+              console.log('Service Worker Registrierung fehlgeschlagen:', error);
+            });
+        });
+      } else {
+        console.log('Service Worker wird im aktuellen Browser nicht unterstützt.');
+      }
+    </script>
 
   </body>
 </html>
