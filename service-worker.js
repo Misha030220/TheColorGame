@@ -1,5 +1,5 @@
 const CACHE_NAME = 'my-cache-v1';
-const urlsToCache = [
+let urlsToCache = [
   
   'index.html',
   'sketch.js',
