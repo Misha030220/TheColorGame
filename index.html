@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-   <link rel="manifest" href="/misha030220.github.io/manifest.json">
+   <link rel="manifest" href="/TheColorGame/manifest.json">
                  <!-- Absolute Pfade verwenden -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
@@ -16,7 +16,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-         navigator.serviceWorker.register('/misha030220.github.io/service-worker.js')  // Absolute Pfade verwenden
+        navigator.serviceWorker.register('/TheColorGame/service-worker.js')  // Absolute Pfade verwenden
             .then(function(registration) {
               console.log('Service Worker registriert mit Scope:', registration.scope);
             })
