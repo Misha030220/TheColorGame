@@ -26,19 +26,6 @@ self.addEventListener('fetch', (event) => {
 });
 
 
-self.addEventListener('install', function(event) {
-  console.log('Service Worker installiert.');
-});
-
-self.addEventListener('activate', function(event) {
-  console.log('Service Worker aktiviert.');
-});
-
-self.addEventListener('fetch', function(event) {
-  console.log('Fetch-Anfrage für:', event.request.url);
-});
-
-
 
 
 
