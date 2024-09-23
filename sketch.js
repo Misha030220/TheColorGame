@@ -100,7 +100,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test7.5', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test8', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -409,9 +409,18 @@ function resetGame() {
 
   // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
   let baseSpeed = 7;  
+ let baseBallSpeed=7;
   let deviceHeight = window.innerHeight;
   let referenceHeight = 600;
  let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
+
+ if (isAndroid()) {
+    baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
+  }
+
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
 
    // Berechnung der Bildschirmdiagonale
   let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
