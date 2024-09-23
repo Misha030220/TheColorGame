@@ -1,4 +1,3 @@
-
 let bucketColor;
 let previousBucketColor; // Variable für die vorherige Farbe des Eimers
 let ballColors = ["#FF00FF", "#33FF33", "#0099FF", "#FFFF00"]; // Neonfarben: Neon-Grün ist jetzt #33FF33
@@ -101,7 +100,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test8', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test8.7', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -401,47 +400,66 @@ function getCurrentBallCount() {
   return numBalls;
 }
 
-// Funktion zum Zurücksetzen des Spiels
-function resetGame() {
- 
-   // Spielvariablen zurücksetzen
-  score = 0;
-  lives = 3;
 
-  // Erneut die Ballgeschwindigkeit basierend auf der Gerätegröße berechnen
-  let baseSpeed = 7;  
- let baseBallSpeed=7;
-  let deviceHeight = window.innerHeight;
-  let referenceHeight = 600;
- let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
 
- if (isAndroid()) {
+// Neue Funktion zum Zurücksetzen der Spielgeschwindigkeit
+function resetSpeed() {
+  baseBallSpeed = 7; // Grundgeschwindigkeit der Bälle
+  
+  // Wenn das Spiel auf Android läuft, setze die Geschwindigkeit auf 15
+  if (isAndroid()) {
     baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
   }
+  
+  // Berechnung der Bildschirmdiagonale
+  let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
+  
+  // Setze die Ballgeschwindigkeit basierend auf der Bildschirmdiagonale
+  ballSpeed = baseBallSpeed * (deviceDiagonal / 600); 
+}
 
+// Funktion zum Zurücksetzen des Spiels
+function resetGame() {
+  score = 0;
+  lives = 3;
+  ballSpawnInterval = 2000; // Zeitintervall zum Spawnen neuer Bälle (in Millisekunden)
+  lastBallSpawnTime = 0;    // Zeitpunkt des letzten Ballspawns
+  gameTime = 0;             // Zeit in Sekunden
+  speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhung (in Millisekunden)
+  lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
+  initialBallCount = 3;     // Anfangszahl der Bälle
+  maxBallCount = 20;        // Maximale Anzahl der Bälle, die im Spiel sein können
+  baseBallSpawnInterval = 2800; // Fester Basiswert in Millisekunden
+  baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
+  deviceHeight = window.innerHeight;
+
+  // Geschwindigkeit zurücksetzen (inkl. Android-Anpassung)
+  resetSpeed();
+  
+  bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
+  previousBucketColor = null;       // Vorherige Farbe zurücksetzen
+
+  lastBallSpawnTime = millis();     // Zeit des letzten Spawns zurücksetzen
+  lastSpeedIncreaseTime = millis(); // Zeit der letzten Geschwindigkeitserhöhung zurücksetzen
+  resetTimer();                     // Timer zurücksetzen
+  spawnBalls(initialBallCount);     // Den ersten Satz von Bällen nach dem Zurücksetzen spawnen
+}
+
+// Funktion zur Erkennung von Android-Geräten
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
 }
 
-   // Berechnung der Bildschirmdiagonale
-  let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
 
-  // Ballgeschwindigkeit basierend auf der Diagonale des Geräts anpassen
-  ballSpeed = baseBallSpeed * (deviceDiagonal / referenceDiagonal);
-  
-  bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
-  previousBucketColor = null; // Vorherige Farbe zurücksetzen
- 
-  lastBallSpawnTime = millis(); // Zeit des letzten Spawns zurücksetzen
-  lastSpeedIncreaseTime = millis(); // Zeit der letzten Geschwindigkeitserhöhung zurücksetzen
-  resetTimer(); // Timer zurücksetzen
-  spawnBalls(initialBallCount); // Den ersten Satz von Bällen nach dem Zurücksetzen spawnen
-}
+
+
 
 // Funktion zum Zurücksetzen des Timers
 function resetTimer() {
   timerStartTime = millis(); // Timer starten
 }
+
+
 
 // Funktion zur Formatierung der Zeit als Minuten:Sekunden
 function formatTime(seconds) {
@@ -562,6 +580,8 @@ function mouseDragged() {
 // Anpassung der Canvas-Größe bei Fenstergrößenänderung
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}    
+}     
+
+                     
 
 
