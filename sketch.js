@@ -419,7 +419,9 @@ let baseBallSpawnInterval = 2800; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
 
-  
+let baseSpeed = 7;  // Basisgeschwindigkeit
+let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
+let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
   
    if (isAndroid()) {
     baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
@@ -569,7 +571,6 @@ function mouseDragged() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }    
-
 
 
 
