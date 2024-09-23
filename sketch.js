@@ -100,7 +100,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test8.5', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test8.7', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
@@ -418,10 +418,8 @@ let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein k�
 let baseBallSpawnInterval = 2800; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
+ let baseSpeed = 7; 
 
-let baseSpeed = 7;  // Basisgeschwindigkeit
-let referenceHeight = 600;  // Referenzhöhe (z.B. für ein kleines Gerät)
-let referenceDiagonal = 600; // Referenzdiagonale für die Berechnung der Geschwindigkeit
   
    if (isAndroid()) {
     baseBallSpeed = 15;  // Setze die Basisgeschwindigkeit für Android-Geräte
@@ -434,8 +432,7 @@ function isAndroid() {
    // Berechnung der Bildschirmdiagonale
   let deviceDiagonal = sqrt(sq(windowWidth) + sq(windowHeight));
 
-  // Ballgeschwindigkeit basierend auf der Diagonale des Geräts anpassen
-  ballSpeed = baseBallSpeed * (deviceDiagonal / referenceDiagonal);
+
   
   bucketColor = random(ballColors); // Eimerfarbe zurücksetzen
   previousBucketColor = null; // Vorherige Farbe zurücksetzen
