@@ -72,23 +72,27 @@ function setup() {
 function isAndroid() {
   return /Android/i.test(navigator.userAgent);
 }
-
-
-
-
-  
-  
-  
 }
+
+
 
 function draw() {
   if (gameState === START_MENU) {
     drawStartMenu();
   } else if (gameState === GAME_PLAY) {
+    if (isAndroid() && !frameCount % 2 === 0) { // Reduziere die Zeichnungsfrequenz
+      return; // Nur alle zwei Frames zeichnen
+    }
     gamePlay();
   }
   increaseBallSpeedContinuously();
 }
+
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+
+
 
 // Funktion zum Zeichnen des Hauptmenüs
 function drawStartMenu() {
@@ -97,7 +101,7 @@ function drawStartMenu() {
   textSize(height / 15); // Größere Textgröße für den Haupttitel
   fill(menuTextColor); // Zufällige Schriftfarbe aus der Liste
   textAlign(CENTER, CENTER);
-  text('Main Menu Test6.5', width / 2, height / 6); // Titel weiter oben
+  text('Main Menu Test7', width / 2, height / 6); // Titel weiter oben
 
   // High Score anzeigen
   textSize(height / 25); // Größere Textgröße für die High Score-Anzeige
