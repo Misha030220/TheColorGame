@@ -1,46 +1,11 @@
-/* Allgemeine Einstellungen für die gesamte Seite */
 html, body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
 }
-
-/* Standard-Inhalt für das Spiel */
-.game-content {
-  width: 100%;
-  height: 100%;
-}
-
-/* Canvas-Einstellungen */
 canvas {
   display: block;
 }
 
-/* Wenn das Gerät ins Querformat gedreht wird */
-@media screen and (orientation: landscape) {
-  body {
-    /* Rotiert den gesamten Inhalt um 90 Grad, um im Hochformat zu bleiben */
-    transform: rotate(90deg);  
-    transform-origin: center center;
-    width: 100vh;    /* Verwende die Höhe des Geräts als Breite */
-    height: 100vw;   /* Verwende die Breite des Geräts als Höhe */
-    overflow: hidden;
-  }
-
-  .game-content {
-    /* Dreht den Spielinhalt zurück, um korrekt im Hochformat angezeigt zu werden */
-    transform: rotate(-90deg);
-    transform-origin: center center;
-    width: 100vh;    /* Korrigiert die Breite und Höhe des Spielinhalts */
-    height: 100vw;
-  }
-}
 
 
 
