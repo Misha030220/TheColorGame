@@ -13,7 +13,7 @@ let speedIncreaseInterval = 7000; // Zeitintervall für Geschwindigkeitserhöhun
 let lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
 let initialBallCount = 3;    // Anfangszahl der Bälle
 let maxBallCount = 20;       // Maximale Anzahl der Bälle, die im Spiel sein können
-let baseBallSpawnInterval = 2500; // Fester Basiswert in Millisekunden
+let baseBallSpawnInterval = 2800; // Fester Basiswert in Millisekunden
 let baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
 let deviceHeight = window.innerHeight;
 
@@ -429,7 +429,7 @@ function resetGame() {
   lastSpeedIncreaseTime = 0;    // Zeitpunkt der letzten Geschwindigkeitserhöhung
   initialBallCount = 3;     // Anfangszahl der Bälle
   maxBallCount = 20;        // Maximale Anzahl der Bälle, die im Spiel sein können
-  baseBallSpawnInterval = 2500; // Fester Basiswert in Millisekunden
+  baseBallSpawnInterval = 2800; // Fester Basiswert in Millisekunden
   baseSpeedIncreaseInterval = 7000; // Fester Basiswert in Millisekunden
   deviceHeight = window.innerHeight;
 
